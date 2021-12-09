@@ -231,8 +231,21 @@ def insert_order():
     total=0
     for c in costPerUnit:
         total=c*quantity
-    db.execute("INSERT INTO transaction(orderid,itemno,platetype,quantity,total) VALUES(:orderid,:itemno,:platetype,:quantity,:total)",{"orderid":orderid,"itemno":itemno,"platetype":platetype,"quantity":quantity,"total":total})
-    db.commit()	    
+    check=db.execute("select quantity,total from transaction where (orderid=:orderid and itemno=:itemno and platetype=:platetype)",{"orderid":orderid,"itemno":itemno,"platetype":platetype}).fetchall()
+   	 
+    if check is None :
+        db.execute("INSERT INTO transaction(orderid,itemno,platetype,quantity,total) VALUES(:orderid,:itemno,:platetype,:quantity,:total)",{"orderid":orderid,"itemno":itemno,"platetype":platetype,"quantity":quantity,"total":total})
+        db.commit()	 
+    else :
+        db.execute("delete from transaction where (orderid=:orderid and itemno=:itemno and platetype=:platetype)",{"orderid":orderid,"itemno":itemno,"platetype":platetype})
+        db.commit()
+        for c in check:
+            quantity=quantity+c['quantity']
+            total=total+c['total']
+            
+        db.execute("INSERT INTO transaction(orderid,itemno,platetype,quantity,total) VALUES(:orderid,:itemno,:platetype,:quantity,:total)",{"orderid":orderid,"itemno":itemno,"platetype":platetype,"quantity":quantity,"total":total})
+        db.commit()	    
+
     return "Order succesfully taken"
 
 

@@ -64,20 +64,14 @@ def login():
   
 
     check=db.execute("SELECT * from users WHERE username=:username",{"username":username}).fetchone()
-    currentLoginUserType=check['usertype']
+    
     
 
     if check is None :
         return "User does not exist"
-    # elif user()==True:
-    #     currUser=session["user"]
-    #     if currUser==username:
-    #         return "You are already logged in"
-    #     else:
-    #         return "You cant not login now,another user is active"
-
-
+   
     else:
+        currentLoginUserType=check['usertype']
         if pass1==check['password']:
            
             session['loggedin']=True

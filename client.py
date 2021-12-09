@@ -152,6 +152,7 @@ while i<=10 :
             response = requests.post(url='http://127.0.0.1:5000/getotherdetails',json=data).content
             print(response.decode('ascii'))
         
+        
          else:
              print("You need to login first")
 

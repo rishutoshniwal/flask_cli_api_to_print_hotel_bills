@@ -136,10 +136,10 @@ def getotherdetails():
     out=out+"Discount/Increase : "+str(discount)+"\n"
 
     val=(val* (100+tip)/100) *((100+discount)/100)
-    out=out+"Final total_cost_of_all_items : "+str(val)+"\n"
+    out=out+"Final total_cost_of_all_items : "+str('%.2f'%val)+"\n"
     out=out+"Count of people who shares bill : "+str(people)+"\n"
     share=val/people
-    out=out+"Updated amount_with_tip to be paid per menu_head : "+str(share)
+    out=out+"Updated amount_with_tip to be paid per menu_head : "+str('%.2f'%share)
 
     return out
 
@@ -231,7 +231,7 @@ def insert_order():
     total=0
     for c in costPerUnit:
         total=c*quantity
-    check=db.execute("select quantity,total from transaction where (orderid=:orderid and itemno=:itemno and platetype=:platetype)",{"orderid":orderid,"itemno":itemno,"platetype":platetype}).fetchall()
+    check=db.execute("select quantity,total from transaction where (orderid=:orderid and itemno=:itemno and platetype=:platetype)",{"orderid":orderid,"itemno":itemno,"platetype":platetype}).fetchone()
    	 
     if check is None :
         db.execute("INSERT INTO transaction(orderid,itemno,platetype,quantity,total) VALUES(:orderid,:itemno,:platetype,:quantity,:total)",{"orderid":orderid,"itemno":itemno,"platetype":platetype,"quantity":quantity,"total":total})
@@ -239,9 +239,9 @@ def insert_order():
     else :
         db.execute("delete from transaction where (orderid=:orderid and itemno=:itemno and platetype=:platetype)",{"orderid":orderid,"itemno":itemno,"platetype":platetype})
         db.commit()
-        for c in check:
-            quantity=quantity+c['quantity']
-            total=total+c['total']
+        # for c in check:
+        quantity=quantity+check['quantity']
+        total=total+check['total']
             
         db.execute("INSERT INTO transaction(orderid,itemno,platetype,quantity,total) VALUES(:orderid,:itemno,:platetype,:quantity,:total)",{"orderid":orderid,"itemno":itemno,"platetype":platetype,"quantity":quantity,"total":total})
         db.commit()	    

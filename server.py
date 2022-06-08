@@ -196,10 +196,10 @@ def fetch_that_bill():
      out=out+"Discount/Increase : "+str(discount)+"\n"
 
      val=(val* (100+tip)/100) *((100+discount)/100)
-     out=out+"Final total_cost_of_all_items : "+str(val)+"\n"
+     out=out+"Final total_cost_of_all_items : "+str('%.2f'%val)+"\n"
      out=out+"Count of people who shares bill : "+str(people)+"\n"
      share=val/people
-     out=out+"Updated amount_with_tip to be paid per menu_head : "+str(share)
+     out=out+"Updated amount_with_tip to be paid per menu_head : "+str('%.2f'%share)
 
      return out
        
